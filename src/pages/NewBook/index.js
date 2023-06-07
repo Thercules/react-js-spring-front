@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useHistory, Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useHistory, Link, useParams } from 'react-router-dom';
 import api from "../../services/api";
 import './styles.css';
 import logo from '../../assets/LogoVB.png'
@@ -13,10 +13,38 @@ export default function NewBook(){
     const [price, setPrice] = useState('');
     const [title, setTitle] = useState('');
 
+    const{bookId} = useParams();
+
     const username = localStorage.getItem('username');
     const accessToken = localStorage.getItem('accessToken');
 
     const history = useHistory();
+
+    async function loadBook() {
+        try {
+            const response = await api.get(`api/book/v1/${bookId}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            })
+            let adjustedDate = response.data.launchDate.split("T", 10)[0]
+
+            setID(response.data.id);
+            setTitle(response.data.title);
+            setAuthor(response.data.author);
+            setPrice(response.data.price);
+            setLaunchDate(adjustedDate);
+
+        } catch (error) {
+           alert('Erro ao recuperar livro')
+           history.push('/books');
+        }
+    }
+
+    useEffect(() => {
+        if (bookId === '0') return;
+        else loadBook();
+    }, [bookId])
 
     async function createNewBook(e){
         e.preventDefault();
@@ -48,7 +76,7 @@ export default function NewBook(){
                 <section className="form">
                     <img src={logo} alt="logo"/>
                     <h1>Adicionar Livro</h1>
-                    <p>Coloque as informações do livro e clique em enviar!</p>
+                    <p>Coloque as informações do livro e clique em enviar! #### {bookId}</p>
                     <Link className="back-link" to="/books">
                         <FiArrowLeft size={16} color="#251fc5"/>
                         Home
