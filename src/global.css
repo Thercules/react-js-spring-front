@@ -10,7 +10,12 @@
 body {
     font: 400 14px Playfair, sans-serif;
     background: #f0f0f5;
-    -webkit-font-smoothing: antialiased; 
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100vh;
+    width: 85vw;
+    max-width: 1900px;
+    margin: 0rem auto;
 }
 
 input, button, textarea {

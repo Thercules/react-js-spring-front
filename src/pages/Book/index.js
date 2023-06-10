@@ -17,7 +17,7 @@ export default function Books(){
     //Function Logout
     async function logout(){
         localStorage.clear();
-        history.push('/');
+        history.push('/login');
     }
 
     async function editBook(id){
